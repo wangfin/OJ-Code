@@ -34,6 +34,7 @@ public class Solution {
         // 设置Set
         Set<Character> set = new HashSet<Character>();
         // 右指针，初始值为 -1，相当于在字符串的左边界的左侧，还没有开始移动
+        // i就是左指针
         int rk = -1, ans = 0;
         // 每一次左指针向右边移动一格，从当前位置的左指针开始探索最长的不重复子串
         for(int i = 0; i < s.length(); i++){
