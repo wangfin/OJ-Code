@@ -59,8 +59,8 @@ public class Solution {
     }
 
     public static void main(String[] args) {
-        int n = 4;
-        int k = 2;
+        int n = 7;
+        int k = 3;
         List<List<Integer>> res = new Solution().combine(n, k);
         System.out.println(res.toString());
     }

@@ -1,6 +1,6 @@
 package Offer10;
 
-public class Solution {
+public class Solution_II {
     /**
      * 和LeetCode70相同，是跳台阶问题
      * 动态规划

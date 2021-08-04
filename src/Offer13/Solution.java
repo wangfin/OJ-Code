@@ -8,9 +8,45 @@ public class Solution {
      * 输入：m = 2, n = 3, k = 1
      * 输出：3
      *
+     * 首先是数位之和，就是先取余数，然后在除10
+     * 数位的增量公式，也就是移动一格数位和增加的幅度
+     * 当(x+1)%10=0，s(x+1)=s(x)-8，例如19,20的10和2
+     * 当(x+1)%10!=0，s(x+1)=s(x)+1，例如1,2的1,2
+     *
+     * 因为每次只能移动一格，所以可达的数位和的解是多个等腰直角三角形
+     * 可能会存在多个区域满足数位和，但是有的区域无法到达
+     *
+     * 所以就是搜索，采用DFS进行搜索，找到可行解的区域
+     * 终止条件： 当 ① 行列索引越界 或 ② 数位和超出目标值 k 或 ③ 当前元素已访问过 时，返回 0 ，代表不计入可达解。
+     * 递推工作：
+     * 标记当前单元格 ：将索引 (i, j) 存入 Set visited 中，代表此单元格已被访问过。
+     * 搜索下一单元格： 计算当前元素的 下、右 两个方向元素的数位和，并开启下层递归 。
      *
      */
+    int m, n, k;
+    boolean[][] visited;
+
     public int movingCount(int m, int n, int k) {
+        // m行n列的方格
+        this.m = m; this.n = n; this.k = k;
+        // 创建一个是否访问过的数组
+        this.visited = new boolean[m][n];
+        // 因为只从[0,0]开始移动，所以不需要进行遍历
+        return dfs(0, 0 ,0 , 0);
+    }
+
+    // i,j表示当前的位置，si,sj表示i,j的数位和
+    public int dfs(int i, int j, int si, int sj){
+        // 终止条件
+        // i,j没有越过边界，si,sj的数位和没有超过k
+        if (i >= m || j >= n || si + sj > k || visited[i][j])
+            return 0;
+        // 将i,j设置为已访问
+        this.visited[i][j] = true;
+        // 往下面
+        // 往右边
+        return 1 + dfs(i + 1, j, (i + 1) % 10 != 0 ? si + 1 : si - 8, sj) +
+                dfs(i, j + 1, si, (j + 1) % 10 != 0 ? sj + 1 : sj - 8);
 
     }
 
