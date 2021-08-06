@@ -49,20 +49,78 @@ public class Codec {
             return "[]";
         // 构建输出
         StringBuilder res = new StringBuilder("[");
+        // 队列用于层序遍历
         Queue<TreeNode> queue = new LinkedList<>();
+        // 先加入根节点
         queue.add(root);
+        // 开始遍历
         while (!queue.isEmpty()){
+            // 弹出队列中的点，用于输入res中
             TreeNode node = queue.poll();
             if (node != null){
-
+                res.append(node.val + ",");
+                // 加入左右子节点，这就是层序遍历的过程
+                queue.add(node.left);
+                queue.add(node.right);
+            }else{
+                // 如果节点为null，表示没有这个节点，但是还是要输出出来
+                res.append("null,");
             }
         }
-
+        // 最后多一个逗号
+        res.deleteCharAt(res.length() - 1);
+        res.append("]");
+        return res.toString();
     }
 
     // Decodes your encoded data to tree.
     public TreeNode deserialize(String data) {
+        /**
+         * 基于本文开始推出的 node , node.left , node.right 在序列化列表中的位置关系，可实现反序列化。
+         * 利用队列按层构建二叉树，借助一个指针 i 指向节点 node 的左、右子节点，每构建一个 node 的左、右子节点，指针 i 就向右移动 11 位。
+         *
+         * 算法流程：
+         * 1.特例处理： 若 data 为空，直接返回 null ；
+         * 2.初始化： 序列化列表 vals （先去掉首尾中括号，再用逗号隔开），指针 i = 1 ，根节点 root （值为 vals[0] ），队列 queue（包含 root ）；
+         * 3.按层构建： 当 queue 为空时跳出；
+         *   1.节点出队，记为 node ；
+         *   2.构建 node 的左子节点：node.left 的值为 vals[i] ，并将 node.left 入队；
+         *   3.执行 i += 1 ；
+         *   4.构建 node 的右子节点：node.left 的值为 vals[i] ，并将 node.left 入队；
+         *   5.执行 i += 1 ；
+         * 4.返回值： 返回根节点 root 即可；
+         *
+         */
+        // 空树
+        if (data.equals("[]"))
+            return null;
+        // 去掉首尾的[]，然后按,划分
+        String[] vals = data.substring(1, data.length() - 1).split(",");
+        // 将字符串转换为数字
+        TreeNode root = new TreeNode(Integer.parseInt(vals[0]));
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        int i = 1;
+        // 遍历queue
+        while (!queue.isEmpty()){
+            TreeNode node = queue.poll();
+            // 不为空，就在树中构造这个节点
+            // 左节点
+            if (!vals[i].equals("null")){
+                node.left = new TreeNode(Integer.parseInt(vals[i]));
+                queue.add(node.left);
+            }
+            // 如果为空就跳过
+            i ++;
+            // 右节点
+            if(!vals[i].equals("null")) {
+                node.right = new TreeNode(Integer.parseInt(vals[i]));
+                queue.add(node.right);
+            }
+            i++;
 
+        }
+        return root;
     }
 
 }
