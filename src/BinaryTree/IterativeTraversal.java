@@ -123,12 +123,18 @@ public class IterativeTraversal {
         Stack<TreeNode> stack = new Stack<>();
         TreeNode cur = root;
         while (cur != null || !stack.isEmpty()){
+            // 指针来访问节点，访问到最底层
             if (cur != null){
+                // 将访问的节点放进栈
                 stack.push(cur);
+                // 左
                 cur = cur.left;
             }else{
+                // 从栈里弹出的数据，就是要处理的数据（放进result数组里的数据）
                 cur = stack.pop();
+                // 中
                 result.add(cur.val);
+                // 右
                 cur = cur.right;
             }
         }
@@ -147,12 +153,15 @@ public class IterativeTraversal {
             TreeNode node = stack.pop();
             result.add(node.val);
             if (node.left != null){
+                // 相对于前序遍历，这更改一下入栈顺序 （空节点不入栈）
                 stack.push(node.left);
             }
             if (node.right != null){
+                // 空节点不入栈
                 stack.push(node.right);
             }
         }
+        // 将结果反转之后就是左右中的顺序了
         Collections.reverse(result);
         return result;
     }
