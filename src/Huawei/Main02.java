@@ -25,7 +25,6 @@ public class Main02 {
             arr[i][1] = t[i];
             arr[i][2] = d[i];
         }
-
 //        Arrays.sort(arr, new Comparator<int[]>() {
 //            @Override
 //            public int compare(int[] o1, int[] o2) {
